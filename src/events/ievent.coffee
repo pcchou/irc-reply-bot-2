@@ -7,31 +7,31 @@ AbstractError = require "../errors/abstracterror.js"
 
 class IEvent extends EventEmitter
   constructor: ()->
-    throw new AbstractError (this.constructor.name)
+    @emit 'error', new AbstractError (this.constructor.name)
 
   getType: ()->
-    throw new UnimplementError (this.constructor.name + " / " + "getType")
+    @emit 'error', new UnimplementError (this.constructor.name + " / " + "getType")
 
   setType: (type)->
-    throw new UnimplementError (this.constructor.name + " / " + "setType")
+    @emit 'error', new UnimplementError (this.constructor.name + " / " + "setType")
 
   defer: (timewaitOveride)->
-    throw new UnimplementError (this.constructor.name + " / " + "defer")
+    @emit 'error', new UnimplementError (this.constructor.name + " / " + "defer")
     #emit defer_finish when all defered runner complete
     #emit defer_timeout when defered runner failed to response in time
     #return function
   async: (timewaitOveride)->
-    throw new UnimplementError (this.constructor.name + " / " + "async")
+    @emit 'error', new UnimplementError (this.constructor.name + " / " + "async")
     #emit async_finish when all async runner complete
     #emit async_timeout when async runner failed to response in time
     #return function
 
   getStat: ()->
-    throw new UnimplementError (this.constructor.name + " / " + "getStat")
+    @emit 'error', new UnimplementError (this.constructor.name + " / " + "getStat")
     #return one word in ['defer', 'async', 'idle']
 
   destroy: ()->
-    throw new UnimplementError (this.constructor.name + " / " + "destroy")
+    @emit 'error', new UnimplementError (this.constructor.name + " / " + "destroy")
     #remove all listeners and related reference to router...etc
 
 module.exports = IEvent

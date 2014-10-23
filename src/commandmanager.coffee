@@ -5,6 +5,7 @@ class CommandManager
     @routerSet = new Set
     @pluginSet = new Set
     @eventLine = []
+    @nameMap = {}
     
     #create event.currentText
     #create event.sender
@@ -32,31 +33,49 @@ class CommandManager
     @eventLine.push "handle_command"#log... etc here
     @eventLine.push "post_handle_command"#sudo, reset permission, print help if exec failed
     
-    
+  ###
+  #just use the same code as plugins
   registerRouter:()->
   
   #use router instance
   unloadRouter:()->
   
   getRouters:()->
+  ###
   
-  registerPlugins:(plugin)->
+  registerModules:(module)->
   
-  #use either namespace, namespace.plugin_name or plugin instance, if blank, disable all plugins
-  disablePlugin:(plugin)->
+  #use [namespace.]plugin_name[#flag] or module instance, if blank, disable all module
+  disableModule:(module)->
   
-  #use either namespace, namespace.plugin_name or plugin instance, if blank, enable all disabled plugins
-  enablePlugin:(plugin)->
+  #use [namespace.]plugin_name[#flag] or module instance, if blank, enable all disabled module
+  enableModule:(module)->
   
-  #use either namespace, namespace.plugin_name or plugin instance, if blank, reload all plugins
-  reloadPlugin:(plugin)->
+  #use [namespace.]plugin_name[#flag] or module instance, if blank, reload all module
+  reloadModule:(module)->
   
-  getPlugins:->
+  #use [namespace.]plugin_name[#flag] or module instance, if blank, unload all module
+  unloadModule:(module)->
   
-  listen:(type, listener, filter)->
+  getModules:->
+  
+  listen:(type, listener, fullName, filter)->
   
   handle:(event)->
   
+  #this method solve the command conflict if multiple commands requested the same command
+  requestCommand:(command, fullName)->
+    avaliableName = null
+    if @nameMap[command] and @nameMap[command] != fullName
+      avaliableName = command + "_"
+    else
+      avaliableName = command
+    
+    @nameMap[command] = fullName
+    
+    return command
 
+  getCommandOwner:(command)->
+    return @nameMap[command]
 
 module.exports = CommandManager
